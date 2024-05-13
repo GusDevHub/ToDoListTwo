@@ -138,7 +138,7 @@ app.get("/completetodo/:id", (req,res) => {
     res.status(200).json(todos[id])
 })
 
-//deleting an item from the list
+//end point delete an item from the list
 app.get("/deletetodo/:id", (req,res) => {
     let id = req.params.id
     if(id >= todos.length || id < 0){
@@ -160,6 +160,7 @@ app.get("/deletetodo/:id", (req,res) => {
 //     res.status(200).json(todos)
 // })
 
+//end point create todos
 app.get("/createtodo/:action/:dueDate", (req,res) => {
     let date = new Date(req.params.dueDate)
     if(date == "Invalid Date"){
@@ -176,7 +177,7 @@ app.get("/createtodo/:action/:dueDate", (req,res) => {
 })
 
 
-//mounting the port
+//listening the port
 app.listen(PORT, () => {
     //console.log followed by the colour and the message
     console.log('\x1b[32m%s\x1b[0m',`🟢  Server is listening on http://localhost:${PORT}`)

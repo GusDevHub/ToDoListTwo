@@ -95,19 +95,23 @@ let todosNotFoundError = {
 }
 
 //end point todos by date from URL
-app.get("/todosbydate/:dueDate", (req,res) => {
-    let date = Date.parse(req.params.dueDate)
-    if(date == NaN){
-        res.status(404).json(dateNotFormattedError)
+app.get("/todosbydate/:dueDate", (req, res) => {
+    let date = new Date(req.params.dueDate) 
+    if(date == NaN) {
+        res.status(404)
+        res.json(dateNotFormattedError)
         return
     }
     let datedArray = todos.filter(x => x.dueDate.getTime() == date.getTime())
-    if(datedArray.length == 0){
-        res.status(404).json(todosNotFoundError)
+    if(datedArray.length == 0) {
+        res.status(404)
+        res.json(todosNotFoundError)
         return
     }
-    res.status(200).json(datedArray)
+    res.status(200)
+    res.json(datedArray)
 })
+
 
 //end point todo status
 app.get("/todosbycompleted/:completed", (req,res) => {
@@ -134,8 +138,45 @@ app.get("/completetodo/:id", (req,res) => {
     res.status(200).json(todos[id])
 })
 
+//deleting an item from the list
+app.get("/deletetodo/:id", (req,res) => {
+    let id = req.params.id
+    if(id >= todos.length || id < 0){
+        res.status(404).json(todoNotFoundError)
+        return
+    }
+    todos.splice(id, 1)
+    res.status(200)
+    res.json({ ListUpdate: `Item [${id}] was deleted from your Todo list, please see updated list below.`, todos })
+})
 
-//
+
+// app.get("/createtodo/:action/:dueDate", (req,res) => {
+//     let action = req.params.action
+//     let dueDate = new Date(req.params.dueDate)
+//     let completed = req.params.completed
+//     let newTodo = {action, dueDate, completed:false}
+//     todos.push(newTodo)
+//     res.status(200).json(todos)
+// })
+
+app.get("/createtodo/:action/:dueDate", (req,res) => {
+    let date = new Date(req.params.dueDate)
+    if(date == "Invalid Date"){
+        res.status(404).json(dateNotFormattedError)
+        return
+    }
+    let todo = {
+        action: req.params.action,
+        dueDate: date,
+        completed: false
+    }
+    todos.push(todo)
+    res.status(200).json(todos)
+})
+
+
+//mounting the port
 app.listen(PORT, () => {
     //console.log followed by the colour and the message
     console.log('\x1b[32m%s\x1b[0m',`🟢  Server is listening on http://localhost:${PORT}`)

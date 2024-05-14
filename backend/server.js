@@ -150,7 +150,7 @@ app.get("/deletetodo/:id", (req,res) => {
     res.json({ ListUpdate: `Item [${id}] was deleted from your Todo list, please see updated list below.`, todos })
 })
 
-
+//old end point create todos
 // app.get("/createtodo/:action/:dueDate", (req,res) => {
 //     let action = req.params.action
 //     let dueDate = new Date(req.params.dueDate)
